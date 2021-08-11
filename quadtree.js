@@ -60,6 +60,13 @@ class Quad{
             }
             //console.log('Reached limit');
             this.subdivide();
+            this.points.forEach(item =>{
+                this.nw.insert(item);
+                this.ne.insert(item);
+                this.sw.insert(item);
+                this.se.insert(item);
+            });
+            this.points = [];
         }
 
         if (this.nw.insert(p)) {return true;}

@@ -1,4 +1,3 @@
-let points = [];
 let mainQuad;
 
 function setup (){
@@ -8,6 +7,10 @@ function setup (){
     rectMode(CENTER);
     noFill();
     mainQuad = new Quad(new Point(width/2, height/2), width, height);
+    for(let i =0; i < 10;i++){
+        let p = new Point(random(width), random(height));
+        mainQuad.insert(p);
+    }
 }
 
 function draw () {
