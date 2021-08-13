@@ -5,7 +5,7 @@ class Quad{
         this.pos = pos;
 
         this.points = [];
-        this.limit = 3;
+        this.limit = 1;
 
         this.nw = null;
         this.ne = null;
@@ -75,6 +75,40 @@ class Quad{
         if (this.se.insert(p)) {return true;}
 
         return false;
+    }
+
+    pointsInRange (range){        
+        let points = [];
+
+        if (!this.interceptsRange(range)){
+            return points;
+        }
+
+        if(this.divided){
+            points = points.concat(this.nw.pointsInRange(range));
+            points = points.concat(this.ne.pointsInRange(range));
+            points = points.concat(this.sw.pointsInRange(range));
+            points = points.concat(this.se.pointsInRange(range));
+            return points;
+        } else {
+            this.points.forEach(point =>{
+                if (point.inRange(range)){
+                    points.push(point);
+                }
+            })
+            return points;
+        }
+    }
+
+    interceptsRange (range) {
+        return ((range.p1.x >= this.pos.x - this.w/2 &&
+                range.p1.x <= this.pos.x + this.w/2) ||
+                (range.p2.x <= this.pos.x + this.w/2 &&
+                range.p2.x >= this.pos.x - this.w/2)) &&
+               ((range.p1.y >= this.pos.y - this.h/2 &&
+                range.p1.y <= this.pos.y + this.h/2) ||
+               (range.p2.y <= this.pos.y + this.h/2 &&
+                range.p2.y >= this.pos.y - this.h/2));
     }
 
     inBounds (p) {

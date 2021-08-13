@@ -1,4 +1,5 @@
 let mainQuad;
+let range;
 
 function setup (){
     createCanvas(500,500);
@@ -11,6 +12,16 @@ function setup (){
         let p = new Point(random(width), random(height));
         mainQuad.insert(p);
     }
+
+    stroke(200);
+    let p1 = new Point(random(width), random(height));
+    let p2 = new Point(p1.x + 50, p1.y + 50);
+    range = new Range(p1, p2);
+
+    console.log(mainQuad.pointsInRange(range));
+
+    rect(range.center.x, range.center.y, range.halfWidth*2, range.halfHeight*2);
+    point(range.center.x, range.center.y);
 }
 
 function draw () {
@@ -19,5 +30,6 @@ function draw () {
         console.log(mainQuad);
         mainQuad.insert(p);
     }
+    
     mainQuad.show();
 }
