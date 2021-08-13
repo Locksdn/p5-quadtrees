@@ -21,7 +21,7 @@ class Range {
     (Point center, Number radius)
     (Point center, Number halfWidth, Number halfHeight)*/
     constructor(p1, p2, p3){
-        if (typeof p2 == Point)
+        if (typeof p2 == 'object')
         {
             this.p1 = p1;
             this.p2 = p2;

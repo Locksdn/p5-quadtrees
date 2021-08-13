@@ -16,10 +16,10 @@ function setup (){
 
     stroke(200);
     let p1 = new Point(random(width), random(height));
-    let p2 = new Point(p1.x + 50, p1.y + 50);
+    let p2 = new Point(p1.x + 100, p1.y + 100);
     range = new Range(p1, p2);
 
-    console.log(mainQuad.pointsInRange(range));
+    console.log(range);
 
     rect(range.center.x, range.center.y, range.halfWidth*2, range.halfHeight*2);
     point(range.center.x, range.center.y);
