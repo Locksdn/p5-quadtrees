@@ -1,9 +1,11 @@
 class Quad{
     constructor(pos, w, h){
+        this.boundary = new Range(pos, w, h);
+/* 
         this.w = w;
         this.h = h;
         this.pos = pos;
-
+ */
         this.points = [];
         this.limit = 1;
 
@@ -16,14 +18,14 @@ class Quad{
 
     subdivide () {
         if (!this.divided){
-            let pos = this.pos;
-            let h = this.h/2;
-            let w = this.w/2;
+            let pos = this.boundary.center;
+            let h = this.boundary.halfHeight/2;
+            let w = this.boundary.halfWidth/2;
 
-            this.nw = new Quad(new Point(pos.x - w/2, pos.y - h/2), w, h);
-            this.ne = new Quad(new Point(pos.x + w/2, pos.y - h/2), w, h);
-            this.sw = new Quad(new Point(pos.x - w/2, pos.y + h/2), w, h);
-            this.se = new Quad(new Point(pos.x + w/2, pos.y + h/2), w, h);
+            this.nw = new Quad(new Point(pos.x - w, pos.y - h), w, h);
+            this.ne = new Quad(new Point(pos.x + w, pos.y - h), w, h);
+            this.sw = new Quad(new Point(pos.x - w, pos.y + h), w, h);
+            this.se = new Quad(new Point(pos.x + w, pos.y + h), w, h);
 
             this.divided = true;
         }
@@ -37,7 +39,8 @@ class Quad{
         })
         stroke(200);
         strokeWeight(1);
-        rect(this.pos.x, this.pos.y, this.w, this.h);
+        rect(this.boundary.center.x, this.boundary.center.y,
+             this.boundary.halfWidth*2, this.boundary.halfHeight*2);
         if (this.divided){
             this.nw.show();
             this.ne.show();
@@ -47,7 +50,7 @@ class Quad{
     }
 
     insert (p) {
-        if (!this.inBounds(p)){
+        if (!p.inRange(this.boundary)){
             return false;
         }
 
@@ -101,23 +104,27 @@ class Quad{
     }
 
     interceptsRange (range) {
-        return ((range.p1.x >= this.pos.x - this.w/2 &&
-                range.p1.x <= this.pos.x + this.w/2) ||
-                (range.p2.x <= this.pos.x + this.w/2 &&
-                range.p2.x >= this.pos.x - this.w/2)) &&
-               ((range.p1.y >= this.pos.y - this.h/2 &&
-                range.p1.y <= this.pos.y + this.h/2) ||
-               (range.p2.y <= this.pos.y + this.h/2 &&
-                range.p2.y >= this.pos.y - this.h/2));
+        let pos = this.boundary.center;
+        let h = this.boundary.halfHeight;
+        let w = this.boundary.halfWidth;
+
+        return ((range.p1.x >= pos.x - w/2 &&
+                range.p1.x <= pos.x + w/2) ||
+                (range.p2.x <= pos.x + w/2 &&
+                range.p2.x >= pos.x - w/2)) &&
+               ((range.p1.y >= pos.y - h/2 &&
+                range.p1.y <= pos.y + h/2) ||
+               (range.p2.y <= pos.y + h/2 &&
+                range.p2.y >= pos.y - h/2));
     }
 
-    inBounds (p) {
-        /* console.log(`is (${Math.round(p.x)}, ${Math.round(p.y)}) between
+    /* inBounds (p) {
+        console.log(`is (${Math.round(p.x)}, ${Math.round(p.y)}) between
                     (${this.pos.x - this.w/2}, ${this.pos.y + this.h/2}) and
-                    (${this.pos.x + this.w/2}, ${this.pos.y - this.h/2})`); */
+                    (${this.pos.x + this.w/2}, ${this.pos.y - this.h/2})`);
         return p.x >= (this.pos.x - this.w/2) &&
                p.x <= this.pos.x + this.w/2 &&
                p.y >= this.pos.y - this.h/2 &&
                p.y <= this.pos.y + this.h/2;
-    }
+    } */
 }

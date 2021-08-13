@@ -7,7 +7,8 @@ function setup (){
     frameRate(15);
     rectMode(CENTER);
     noFill();
-    mainQuad = new Quad(new Point(width/2, height/2), width, height);
+    
+    mainQuad = new Quad(new Point(width/2, height/2), width/2, height/2);
     for(let i =0; i < 10;i++){
         let p = new Point(random(width), random(height));
         mainQuad.insert(p);
@@ -22,6 +23,8 @@ function setup (){
 
     rect(range.center.x, range.center.y, range.halfWidth*2, range.halfHeight*2);
     point(range.center.x, range.center.y);
+
+    console.log(mainQuad);
 }
 
 function draw () {
