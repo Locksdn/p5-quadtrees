@@ -35,7 +35,7 @@ class Range {
         this.halfWidth = p2;
         
 
-        if (typeof p3 != undefined)
+        if (typeof p3 != 'undefined')
         {
             this.halfHeight = p3;
         } else {

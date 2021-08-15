@@ -1,13 +1,15 @@
 class Quad{
     constructor(pos, w, h){
         this.boundary = new Range(pos, w, h);
+        this.color = color(200);
+        this.strokeWeight = 2;
 /* 
         this.w = w;
         this.h = h;
         this.pos = pos;
  */
         this.points = [];
-        this.limit = 1;
+        this.limit = 3;
 
         this.nw = null;
         this.ne = null;
@@ -33,12 +35,12 @@ class Quad{
 
     show () {
         stroke('#e9ecef');
-        strokeWeight(5);
+        strokeWeight(2);
         this.points.forEach(p =>{
             point(p.x, p.y);
         })
-        stroke(200);
-        strokeWeight(1);
+        stroke(this.color);
+        strokeWeight(this.strokeWeight);
         rect(this.boundary.center.x, this.boundary.center.y,
              this.boundary.halfWidth*2, this.boundary.halfHeight*2);
         if (this.divided){
@@ -84,8 +86,14 @@ class Quad{
         let points = [];
 
         if (!this.interceptsRange(range)){
+            //console.log('no');
+            /* this.color = color(200);
+            this.strokeWeight = 2; */
             return points;
         }
+
+        /* this.color = color(0, 255, 0);
+        this.strokeWeight = 6; */
 
         if(this.divided){
             points = points.concat(this.nw.pointsInRange(range));
@@ -104,18 +112,24 @@ class Quad{
     }
 
     interceptsRange (range) {
-        let pos = this.boundary.center;
-        let h = this.boundary.halfHeight;
-        let w = this.boundary.halfWidth;
 
-        return ((range.p1.x >= pos.x - w/2 &&
-                range.p1.x <= pos.x + w/2) ||
-                (range.p2.x <= pos.x + w/2 &&
-                range.p2.x >= pos.x - w/2)) &&
-               ((range.p1.y >= pos.y - h/2 &&
-                range.p1.y <= pos.y + h/2) ||
-               (range.p2.y <= pos.y + h/2 &&
-                range.p2.y >= pos.y - h/2));
+        let pos = this.boundary;
+
+        /* console.log(`Does the range (${range.p1.x}, ${range.p1.y}), (${range.p2.x}, ${range.p2.y}) intercept
+                    with (${this.boundary.p1.x}, ${this.boundary.p1.y}), (${this.boundary.p2.x}, ${this.boundary.p2.y})`);
+ */
+        return (((range.p1.x >= pos.p1.x &&
+                range.p1.x <= pos.p2.x) ||
+                (range.p2.x <= pos.p2.x &&
+                range.p2.x >= pos.p1.x)) &&
+               ((range.p1.y >= pos.p1.y &&
+                range.p1.y <= pos.p2.y) ||
+               (range.p2.y <= pos.p2.y &&
+                range.p2.y >= pos.p1.y))) ||
+                ((range.p1.x < pos.p1.x &&
+                range.p2.x > pos.p2.x) ||
+                (range.p1.y < pos.p1.y &&
+                range.p2.y > pos.p2.y));
     }
 
     /* inBounds (p) {
