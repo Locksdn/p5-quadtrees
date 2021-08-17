@@ -1,13 +1,12 @@
 class Quad{
-    constructor(pos, w, h){
+    constructor(pos, w, h, debug=false){
         this.boundary = new Range(pos, w, h);
+
         this.color = color(200);
         this.strokeWeight = 2;
-/* 
-        this.w = w;
-        this.h = h;
-        this.pos = pos;
- */
+        this.drawQuad = debug;
+        this.drawPoints = true;
+
         this.points = [];
         this.limit = 3;
 
@@ -18,32 +17,60 @@ class Quad{
         this.divided = false;
     }
 
+    setDrawQuad(bool){
+        this.drawQuad = bool;
+        if (this.divided){
+            this.nw.setDrawQuad(bool);
+            this.ne.setDrawQuad(bool);
+            this.sw.setDrawQuad(bool);
+            this.se.setDrawQuad(bool);
+        }
+    }
+
+    setDrawPoints(bool){
+        this.drawPoints = bool;
+        if (this.divided){
+            this.nw.setDrawPoints(bool);
+            this.ne.setDrawPoints(bool);
+            this.sw.setDrawPoints(bool);
+            this.se.setDrawPoints(bool);
+        }
+    }
+
     subdivide () {
         if (!this.divided){
             let pos = this.boundary.center;
             let h = this.boundary.halfHeight/2;
             let w = this.boundary.halfWidth/2;
 
-            this.nw = new Quad(new Point(pos.x - w, pos.y - h), w, h);
-            this.ne = new Quad(new Point(pos.x + w, pos.y - h), w, h);
-            this.sw = new Quad(new Point(pos.x - w, pos.y + h), w, h);
-            this.se = new Quad(new Point(pos.x + w, pos.y + h), w, h);
+            this.nw = new Quad(new Point(pos.x - w, pos.y - h), w, h, this.drawQuad);
+            this.ne = new Quad(new Point(pos.x + w, pos.y - h), w, h, this.drawQuad);
+            this.sw = new Quad(new Point(pos.x - w, pos.y + h), w, h, this.drawQuad);
+            this.se = new Quad(new Point(pos.x + w, pos.y + h), w, h, this.drawQuad);
 
             this.divided = true;
         }
     }
 
     show () {
-        stroke('#e9ecef');
-        strokeWeight(2);
-        this.points.forEach(p =>{
-            point(p.x, p.y);
-        })
-        stroke(this.color);
-        strokeWeight(this.strokeWeight);
-        rect(this.boundary.center.x, this.boundary.center.y,
-             this.boundary.halfWidth*2, this.boundary.halfHeight*2);
-        if (this.divided){
+        
+        if (this.drawPoints)
+        {
+            this.points.forEach(p =>{
+                p.show();
+            });
+        }
+
+        if (this.drawQuad)
+        {
+            stroke(this.color);
+            strokeWeight(this.strokeWeight);
+            rect(this.boundary.center.x, this.boundary.center.y,
+                this.boundary.halfWidth*2, this.boundary.halfHeight*2);
+        }
+
+        if (this.divided)
+        {
             this.nw.show();
             this.ne.show();
             this.sw.show();
